@@ -4,8 +4,6 @@ A premium, interactive, and hyper-modern landing page for **UGC AdMaker**—an A
 
 This project is built with a focus on immersive UX, featuring custom holographic effects, glassmorphic UI components, and smooth framer-motion animations.
 
-![UGC AdMaker Screenshot](https://ugcadmaker.ai/_next/image?url=%2Flogo.png&w=3840&q=75)
-
 ## ✨ Key Features
 
 - **Liquid Glass Design:** A deep-space aesthetic (`#030014`) with glassmorphism, noise overlays, and vibrant gradients.
