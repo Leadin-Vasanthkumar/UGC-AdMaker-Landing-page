@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { 
   ArrowRight, 
   Globe, 
@@ -27,6 +27,9 @@ import {
   ScanLine,
   Users
 } from 'lucide-react';
+import { ShineBorder } from '@/components/ui/shine-border';
+import HolographicCard from '@/components/ui/holographic-card';
+import { LiquidButton } from '@/components/ui/liquid-glass-button';
 
 const LOGO_URL = "https://ugcadmaker.ai/_next/image?url=%2Flogo.png&w=3840&q=75";
 
@@ -70,6 +73,7 @@ export default function App() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -78,12 +82,14 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#030014] text-gray-100 selection:bg-purple-500/30 selection:text-white overflow-x-hidden relative font-sans">
+    <div className="min-h-screen bg-[#030014] text-white selection:bg-purple-500/30 selection:text-white overflow-x-hidden relative font-sans">
       {/* Noise Overlay */}
-      <div 
-        className="fixed inset-0 z-[1] opacity-[0.03] pointer-events-none mix-blend-overlay"
-        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
-      />
+      {!shouldReduceMotion && (
+        <div 
+          className="fixed inset-0 z-[1] opacity-[0.03] pointer-events-none mix-blend-overlay"
+          style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
+        />
+      )}
 
       {/* Background Gradients */}
       <div className="fixed inset-0 z-0 pointer-events-none">
@@ -157,8 +163,9 @@ export default function App() {
               loop 
               playsInline 
               className="absolute inset-0 w-full h-full object-cover opacity-50"
+              title="Hero Background Video"
             >
-              <source src="/download_1_dt0fov.mp4" type="video/mp4" />
+              <source src="/Untitled%20video.mp4" type="video/mp4" />
             </video>
             <div className="absolute inset-0 bg-gradient-to-b from-[#030014]/50 via-transparent to-[#030014]" />
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
@@ -171,9 +178,9 @@ export default function App() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="text-6xl md:text-8xl tracking-tighter font-bold text-white mb-8 leading-[0.95] md:leading-[0.9]"
+              className="text-6xl md:text-8xl tracking-tight font-bold text-white mb-8 leading-[0.96] md:leading-[0.9]"
             >
-              <span className="text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-zinc-400">Create AI UGC Ads <br />that </span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-zinc-400">Create AI&nbsp;UGC Ads<br />that </span>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-orange-500">sell.</span>
             </motion.h1>
             
@@ -181,7 +188,7 @@ export default function App() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-              className="text-lg md:text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed font-light tracking-wide"
+              className="text-lg md:text-xl text-muted mb-12 max-w-2xl mx-auto leading-relaxed font-light tracking-wide"
             >
               Create stunning product videos, avatars, and ads that actually feel <span className="text-white font-medium">real</span>. Built for high <span className="text-white font-medium">ROAS</span>.
             </motion.p>
@@ -227,7 +234,7 @@ export default function App() {
                 className="flex flex-col items-center md:items-start"
               >
                 <div className="text-2xl md:text-3xl font-bold text-white tracking-tight">{stat.value}</div>
-                <div className="text-xs md:text-sm font-medium text-gray-500 uppercase tracking-widest">{stat.label}</div>
+                <div className="text-xs md:text-sm font-medium text-muted-darker uppercase tracking-widest">{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -252,6 +259,7 @@ export default function App() {
                     autoPlay 
                     muted 
                     playsInline 
+                    aria-label={`UGC Ad example ${i + 1}`}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 pointer-events-none" />
                 </div>
@@ -274,132 +282,157 @@ export default function App() {
                 Everything you need to <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-orange-500">dominate the feed.</span>
               </h2>
-              <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto">We've packed the power of a Hollywood studio into a web app.</p>
+              <p className="text-muted text-lg md:text-xl max-w-2xl mx-auto">We've packed the power of a Hollywood studio into a web app.</p>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
               {/* Product-in-Hand */}
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8 }}
-                whileHover={{ y: -5 }}
-                className="md:col-span-7 rounded-[2.5rem] bg-white/[0.02] border border-white/5 p-8 md:p-12 relative overflow-hidden group hover:border-purple-500/20 transition-all duration-500 min-h-[500px] flex flex-col justify-between"
+                className="md:col-span-7"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-900/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                <div className="relative z-10 max-w-lg">
-                  <span className="inline-block px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-xs font-bold text-purple-400 uppercase tracking-widest mb-6">Flagship Feature</span>
-                  <h3 className="text-3xl md:text-4xl font-medium text-white mb-4 tracking-tight">Product-in-Hand</h3>
-                  <p className="text-gray-400 text-lg font-light leading-relaxed">Generate hyper-realistic POV shots. Your product, in an AI influencer's hand, perfectly lit and stabilized.</p>
-                </div>
-                <div className="mt-12 flex-1 w-full rounded-3xl overflow-hidden border border-white/5 bg-black/20 backdrop-blur-sm relative group-hover:scale-[1.02] transition-transform duration-500 ring-1 ring-white/10 shadow-2xl">
-                  <video 
-                    src="https://d1123smn8d6em4.cloudfront.net/features-assets/product%20in%20hand.mp4" 
-                    className="w-full h-full object-cover" 
-                    autoPlay 
-                    muted 
-                    loop 
-                    playsInline 
-                  />
-                </div>
+                <HolographicCard className="w-full h-full">
+                  <ShineBorder 
+                    className="w-full h-full rounded-[2.5rem] bg-white/[0.02] border border-white/5 p-8 md:p-12 relative overflow-hidden group hover:border-brand-purple/20 transition-all cursor-pointer"
+                    borderRadius={40}
+                    borderWidth={2}
+                    color={["#A855F7", "#3B82F6"]}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-900/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    <div className="relative z-10 max-w-lg text-left">
+                      <span className="inline-block px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-xs font-bold text-purple-400 uppercase tracking-widest mb-6">Flagship Feature</span>
+                      <h3 className="text-3xl md:text-4xl font-medium text-white mb-4 tracking-tight">Product-in-Hand</h3>
+                      <p className="text-muted text-lg font-light leading-relaxed">Generate hyper-realistic POV shots. Your product, in an AI influencer's hand, perfectly lit and stabilized.</p>
+                    </div>
+                    <div className="mt-12 flex-1 w-full rounded-3xl overflow-hidden border border-white/5 bg-black/20 backdrop-blur-sm relative group-hover:scale-[1.02] transition-transform duration-500 ring-1 ring-white/10 shadow-2xl">
+                      <video 
+                        src="https://d1123smn8d6em4.cloudfront.net/features-assets/product%20in%20hand.mp4" 
+                        className="w-full h-full object-cover" 
+                        autoPlay 
+                        muted 
+                        loop 
+                        playsInline 
+                        title="Hyper-realistic POV shots demonstration"
+                      />
+                    </div>
+                  </ShineBorder>
+                </HolographicCard>
               </motion.div>
 
               {/* Link to Ads */}
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                whileHover={{ y: -5 }}
-                className="md:col-span-5 rounded-[2.5rem] bg-white/[0.02] border border-white/5 p-8 md:p-12 relative overflow-hidden group hover:border-blue-500/20 transition-all duration-500 min-h-[500px] flex flex-col"
+                className="md:col-span-5"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                <div className="relative z-10 mb-8">
-                  <h3 className="text-3xl font-medium text-white mb-4">Link to Ads</h3>
-                  <p className="text-gray-400 text-sm font-light">Paste a URL. Get high-converting video ads in seconds.</p>
-                </div>
-                <div className="flex-1 w-full relative overflow-hidden rounded-2xl border border-white/5 bg-gradient-to-b from-blue-500/5 to-transparent mask-linear-fade">
-                  <div className="absolute inset-0 flex flex-col items-center justify-center p-6 gap-8">
-                    <div className="relative w-full max-w-sm h-12 rounded-xl bg-black/40 border border-white/10 flex items-center px-4 overflow-hidden shadow-lg z-20">
-                      <Globe className="w-4 h-4 text-gray-500 mr-3" />
-                      <div className="h-2 w-24 bg-white/20 rounded-full" />
-                      <div className="h-2 w-12 bg-white/20 rounded-full ml-2" />
-                      <motion.div 
-                        animate={{ x: ["-100%", "200%"] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                        className="absolute inset-y-0 w-12 bg-gradient-to-r from-transparent via-blue-500/30 to-transparent skew-x-12" 
-                      />
-                      <motion.div 
-                        animate={{ scale: [1, 1.5, 1] }}
-                        transition={{ duration: 1, repeat: Infinity }}
-                        className="absolute right-3 w-2 h-2 rounded-full bg-green-500" 
-                      />
+                <HolographicCard className="w-full h-full">
+                  <ShineBorder 
+                    className="w-full h-full rounded-[2.5rem] bg-white/[0.02] border border-white/5 p-8 md:p-12 relative overflow-hidden group hover:border-blue-500/20 transition-all cursor-pointer"
+                    borderRadius={40}
+                    borderWidth={2}
+                    color={["#3B82F6", "#14B8A6"]}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    <div className="relative z-10 mb-8 text-left">
+                      <h3 className="text-3xl font-medium text-white mb-4">Link to Ads</h3>
+                      <p className="text-muted text-sm font-light">Paste a URL. Get high-converting video ads in seconds.</p>
                     </div>
-                    <div className="relative w-full h-32 flex justify-center perspective-[1000px]">
-                      <motion.div 
-                        animate={{ x: [0, -100, 0] }}
-                        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                        className="flex gap-4 absolute"
-                      >
-                        {[1, 2, 3, 4, 5].map(i => (
+                    <div className="flex-1 w-full relative overflow-hidden rounded-2xl border border-white/5 bg-gradient-to-b from-blue-500/5 to-transparent mask-linear-fade">
+                      <div className="absolute inset-0 flex flex-col items-center justify-center p-6 gap-8">
+                        <div className="relative w-full max-w-sm h-12 rounded-xl bg-black/40 border border-white/10 flex items-center px-4 overflow-hidden shadow-lg z-20">
+                          <Globe className="w-4 h-4 text-muted-darker mr-3" />
+                          <div className="h-2 w-24 bg-white/20 rounded-full" />
+                          <div className="h-2 w-12 bg-white/20 rounded-full ml-2" />
                           <motion.div 
-                            key={i} 
-                            whileHover={{ scale: 1.1, zIndex: 30 }}
-                            className="w-20 h-32 rounded-lg bg-white/5 border border-white/10 relative overflow-hidden flex-shrink-0 group cursor-pointer"
+                            animate={{ x: ["-100%", "200%"] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                            className="absolute inset-y-0 w-12 bg-gradient-to-r from-transparent via-blue-500/30 to-transparent skew-x-12" 
+                          />
+                          <motion.div 
+                            animate={{ scale: [1, 1.5, 1] }}
+                            transition={{ duration: 1, repeat: Infinity }}
+                            className="absolute right-3 w-2 h-2 rounded-full bg-green-500" 
+                          />
+                        </div>
+                        <div className="relative w-full h-32 flex justify-center perspective-[1000px]">
+                          <motion.div 
+                            animate={{ x: [0, -100, 0] }}
+                            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                            className="flex gap-4 absolute"
                           >
-                            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent" />
-                            <div className="absolute bottom-2 left-2 w-8 h-1 bg-white/30 rounded-full" />
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm group-hover:scale-110 transition-transform">
-                              <Play className="w-2.5 h-2.5 text-white fill-white" />
-                            </div>
+                            {[1, 2, 3, 4, 5].map(i => (
+                              <motion.div 
+                                key={i} 
+                                whileHover={{ scale: 1.1, zIndex: 30 }}
+                                className="w-20 h-32 rounded-lg bg-white/5 border border-white/10 relative overflow-hidden flex-shrink-0 group cursor-pointer"
+                              >
+                                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent" />
+                                <div className="absolute bottom-2 left-2 w-8 h-1 bg-white/30 rounded-full" />
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm group-hover:scale-110 transition-transform">
+                                  <Play className="w-2.5 h-2.5 text-white fill-white" />
+                                </div>
+                              </motion.div>
+                            ))}
                           </motion.div>
-                        ))}
-                      </motion.div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </ShineBorder>
+                </HolographicCard>
               </motion.div>
 
               {/* Creative Inspiration */}
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8 }}
-                whileHover={{ y: -5 }}
-                className="md:col-span-12 rounded-3xl bg-[#080808] border border-white/10 p-8 md:p-12 relative overflow-hidden group min-h-[500px] flex flex-col justify-between hover:border-white/20 transition-all"
+                className="md:col-span-12"
               >
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.1),transparent_50%)]" />
-                <div className="relative z-10 max-w-xl">
-                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs font-bold text-emerald-400 uppercase tracking-widest mb-6">
-                    <Sparkles className="w-3 h-3" /> Magic
-                  </span>
-                  <h3 className="text-4xl md:text-5xl font-medium text-white mb-4 tracking-tight">Creative Inspiration</h3>
-                  <p className="text-gray-400 text-lg font-light leading-relaxed">Found a winning ad structure? Apply your brand assets to proven marketing frameworks in seconds.</p>
-                </div>
-                <div className="relative grid grid-cols-2 md:grid-cols-4 gap-4 mt-12">
-                  {[
-                    { icon: Upload, label: "Upload", step: "01" },
-                    { icon: ScanLine, label: "Analyze", step: "02" },
-                    { icon: Users, label: "Branding", step: "03" },
-                    { icon: Sparkles, label: "Generate", step: "04", active: true }
-                  ].map((item, i) => (
-                    <motion.div 
-                      key={i} 
-                      whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.05)" }}
-                      className={`p-4 rounded-2xl border ${item.active ? 'bg-emerald-500/10 border-emerald-500/20' : 'bg-white/5 border-white/5'} flex flex-col gap-3 transition-colors`}
-                    >
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${item.active ? 'bg-emerald-500/20 text-emerald-400' : 'bg-white/5 text-gray-400'}`}>
-                        <item.icon className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <div className="text-[10px] font-mono opacity-50 mb-1">{item.step}</div>
-                        <div className={`text-sm font-medium ${item.active ? 'text-white' : 'text-gray-400'}`}>{item.label}</div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
+                <HolographicCard className="w-full h-full">
+                  <ShineBorder 
+                    className="w-full h-full rounded-3xl bg-white/[0.02] border border-white/5 p-8 md:p-12 relative overflow-hidden group min-h-[500px] flex flex-col justify-between hover:border-brand-purple/20 transition-all cursor-pointer"
+                    borderRadius={24}
+                    borderWidth={2}
+                    color={["#A855F7", "#F97316"]}
+                  >
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.1),transparent_50%)]" />
+                    <div className="relative z-10 max-w-xl text-left">
+                      <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-purple/10 border border-brand-purple/20 text-xs font-bold text-brand-purple uppercase tracking-widest mb-6">
+                        <Sparkles className="w-3 h-3" /> Magic
+                      </span>
+                      <h3 className="text-4xl md:text-5xl font-medium text-white mb-4 tracking-tight">Creative Inspiration</h3>
+                      <p className="text-muted text-lg font-light leading-relaxed">Found a winning ad structure? Apply your brand assets to proven marketing frameworks in seconds.</p>
+                    </div>
+                    <div className="relative grid grid-cols-2 md:grid-cols-4 gap-4 mt-12">
+                      {[
+                        { icon: Upload, label: "Upload", step: "01" },
+                        { icon: ScanLine, label: "Analyze", step: "02" },
+                        { icon: Users, label: "Branding", step: "03" },
+                        { icon: Sparkles, label: "Generate", step: "04", active: true }
+                      ].map((item, i) => (
+                        <motion.div 
+                          key={i} 
+                          whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.05)" }}
+                          className={`p-4 rounded-2xl border ${item.active ? 'bg-brand-purple/10 border-brand-purple/20' : 'bg-white/5 border-white/5'} flex flex-col gap-3 transition-colors`}
+                        >
+                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${item.active ? 'bg-brand-purple/20 text-brand-purple' : 'bg-white/5 text-muted'}`}>
+                            <item.icon className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <div className="text-[10px] font-mono opacity-50 mb-1">{item.step}</div>
+                            <div className={`text-sm font-medium ${item.active ? 'text-white' : 'text-muted'}`}>{item.label}</div>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </ShineBorder>
+                </HolographicCard>
               </motion.div>
 
               {/* 250+ Avatars */}
@@ -409,7 +442,7 @@ export default function App() {
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8 }}
                 whileHover={{ y: -5 }}
-                className="md:col-span-4 rounded-[2.5rem] bg-white/[0.02] border border-white/5 p-6 relative overflow-hidden group hover:border-pink-500/20 transition-all duration-500 h-[450px] flex flex-col justify-between"
+                className="md:col-span-4 rounded-[2.5rem] bg-white/[0.02] border border-white/5 p-6 relative overflow-hidden group hover:border-pink-500/20 transition-all duration-500 h-[450px] flex flex-col justify-between cursor-pointer"
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-pink-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                 <div className="relative z-10 flex-1 w-full overflow-hidden mask-linear-fade h-[350px]">
@@ -434,7 +467,7 @@ export default function App() {
                 </div>
                 <div className="relative z-20 pointer-events-none mt-2">
                   <h3 className="text-2xl font-medium text-white mb-0.5">250+ Avatars</h3>
-                  <p className="text-gray-300 text-xs">Real emotions. Real diversity.</p>
+                  <p className="text-muted text-xs">Real emotions. Real diversity.</p>
                 </div>
               </motion.div>
 
@@ -445,14 +478,14 @@ export default function App() {
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8, delay: 0.1 }}
                 whileHover={{ y: -5 }}
-                className="md:col-span-4 rounded-[2.5rem] bg-white/[0.02] border border-white/5 p-6 relative overflow-hidden group hover:border-orange-500/20 transition-all duration-500 h-[450px] flex flex-col"
+                className="md:col-span-4 rounded-[2.5rem] bg-white/[0.02] border border-white/5 p-6 relative overflow-hidden group hover:border-orange-500/20 transition-all duration-500 h-[450px] flex flex-col cursor-pointer"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-orange-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                 <div className="flex items-center gap-3 mb-2">
                   <Brain className="text-orange-500 w-6 h-6 group-hover:scale-110 transition-transform duration-300" />
                   <h3 className="text-2xl font-medium text-white">Scriptwriter</h3>
                 </div>
-                <p className="text-gray-400 text-xs mb-4 leading-relaxed">Input a hook, get a viral script in seconds.</p>
+                <p className="text-muted text-xs mb-4 leading-relaxed">Input a hook, get a viral script in seconds.</p>
                 <div className="flex-1 w-full relative overflow-hidden rounded-xl border border-white/5 bg-gradient-to-br from-white/5 to-transparent p-6 flex flex-col items-center justify-center">
                   <div className="w-full max-w-[280px] space-y-3 relative z-10">
                     {[
@@ -469,7 +502,7 @@ export default function App() {
                       >
                         <div className="flex items-center gap-2 mb-1.5">
                           <div className={`w-1.5 h-1.5 rounded-full ${item.color} shadow-[0_0_8px_currentColor]`} />
-                          <span className="text-[10px] uppercase tracking-wider font-bold text-gray-400">{item.label}</span>
+                          <span className="text-[10px] uppercase tracking-wider font-bold text-muted">{item.label}</span>
                         </div>
                         <p className="text-xs text-gray-200 font-medium leading-relaxed">{item.text}</p>
                         <motion.div 
@@ -491,14 +524,14 @@ export default function App() {
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8, delay: 0.2 }}
                 whileHover={{ y: -5 }}
-                className="md:col-span-4 rounded-[2.5rem] bg-white/[0.02] border border-white/5 p-6 relative overflow-hidden group hover:border-teal-500/20 transition-all duration-500 h-[450px] flex flex-col"
+                className="md:col-span-4 rounded-[2.5rem] bg-white/[0.02] border border-white/5 p-6 relative overflow-hidden group hover:border-teal-500/20 transition-all duration-500 h-[450px] flex flex-col cursor-pointer"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-teal-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-2xl font-medium text-white">Editor</h3>
                   <span className="px-2 py-0.5 rounded bg-teal-500/20 text-teal-400 text-[10px] font-bold uppercase">New</span>
                 </div>
-                <p className="text-gray-400 text-xs mb-4">Customize every detail. Truly yours.</p>
+                <p className="text-muted text-xs mb-4">Customize every detail. Truly yours.</p>
                 <div className="flex-1 w-full relative overflow-hidden rounded-xl border border-white/5 bg-black/40 flex flex-col items-center justify-center p-6 group-hover:border-teal-500/30 transition-colors duration-500">
                   <div className="w-full max-w-[260px] bg-white/5 rounded-xl border border-white/10 p-4 space-y-4 relative z-10 backdrop-blur-sm">
                     <div className="flex items-center justify-between border-b border-white/5 pb-2">
@@ -573,7 +606,7 @@ export default function App() {
                   </div>
                 </div>
                 <h3 className="text-3xl font-bold text-white mb-4 tracking-tight">{feature.title}</h3>
-                <p className="text-gray-400 leading-relaxed font-light text-lg">{feature.desc}</p>
+                <p className="text-muted leading-relaxed font-light text-lg">{feature.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -590,7 +623,7 @@ export default function App() {
               className="text-center mb-20"
             >
               <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight">Stop burning your ad budget.</h2>
-              <p className="text-gray-400 text-lg md:text-xl font-light max-w-2xl mx-auto">The traditional agency model is dead. Scale your creative testing without the overhead.</p>
+              <p className="text-muted text-lg md:text-xl font-light max-w-2xl mx-auto">The traditional agency model is dead. Scale your creative testing without the overhead.</p>
             </motion.div>
 
             <div className="flex flex-col md:flex-row gap-8 lg:gap-24 relative items-stretch justify-center">
@@ -603,10 +636,10 @@ export default function App() {
                 className="flex-1 w-full bg-[#050505] border border-white/5 rounded-3xl px-8 py-10 relative overflow-hidden group hover:border-white/10 transition-colors"
               >
                 <div className="relative z-10 mb-8 flex flex-col items-center mx-auto text-center">
-                  <span className="inline-block px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">The Old Way</span>
-                  <h3 className="text-2xl font-medium text-gray-300 mb-1">Human Creators</h3>
+                  <span className="inline-block px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-bold text-muted uppercase tracking-widest mb-4">The Old Way</span>
+                  <h3 className="text-2xl font-medium text-muted mb-1">Human Creators</h3>
                 </div>
-                <ul className="space-y-5 relative z-10 text-gray-500 text-base max-w-sm mx-auto">
+                <ul className="space-y-5 relative z-10 text-muted-darker text-base max-w-sm mx-auto">
                   {[
                     { text: "Find & negotiate with creators", price: "$200+" },
                     { text: "Ship physical products & wait", price: "$50+" },
@@ -624,7 +657,7 @@ export default function App() {
                   ))}
                 </ul>
                 <div className="mt-8 pt-6 border-t border-white/5 flex flex-col justify-center items-center relative z-10 max-w-sm mx-auto">
-                  <div className="text-2xl font-bold text-gray-300">$100-250+ <span className="text-sm font-normal text-gray-600">per ad</span></div>
+                  <div className="text-2xl font-bold text-muted">$100-250+ <span className="text-sm font-normal text-muted-darker">per ad</span></div>
                 </div>
               </motion.div>
 
@@ -636,7 +669,7 @@ export default function App() {
                 transition={{ delay: 0.4, duration: 0.5, type: "spring" }}
                 className="md:absolute left-1/2 top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 z-20 flex items-center justify-center my-4 md:my-0"
               >
-                <div className="w-12 h-12 rounded-full bg-[#050505] border border-white/10 shadow-2xl flex items-center justify-center text-gray-500">
+                <div className="w-12 h-12 rounded-full bg-[#050505] border border-white/10 shadow-2xl flex items-center justify-center text-muted-darker">
                   <ArrowRight className="w-6 h-6 rotate-90 md:rotate-0 text-purple-400/80" />
                 </div>
               </motion.div>
@@ -656,7 +689,7 @@ export default function App() {
                   </span>
                   <h3 className="text-2xl font-bold text-white mb-1">UGC AdMaker</h3>
                 </div>
-                <ul className="space-y-5 relative z-10 text-gray-300 text-base max-w-sm mx-auto">
+                <ul className="space-y-5 relative z-10 text-muted text-base max-w-sm mx-auto">
                   {[
                     "Select a hyper-realistic AI Avatar",
                     "AI writes high-converting scripts",
@@ -699,7 +732,7 @@ export default function App() {
               <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tight">Built for the next generation of <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-orange-500">performance marketing.</span>
               </h2>
-              <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto font-light">Whether you're a solo founder or a global agency, we've got you covered.</p>
+              <p className="text-muted text-lg md:text-xl max-w-2xl mx-auto font-light">Whether you're a solo founder or a global agency, we've got you covered.</p>
             </motion.div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
@@ -714,7 +747,7 @@ export default function App() {
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.6, delay: i * 0.1 }}
                   whileHover={{ y: -8, scale: 1.02 }}
-                  className="p-10 rounded-[2.5rem] bg-[#0A0A0A] border border-white/10 hover:border-white/20 transition-all duration-300 group relative overflow-hidden"
+                  className="p-10 rounded-[2.5rem] bg-[#0A0A0A] border border-white/10 hover:border-white/20 transition-all duration-300 group relative overflow-hidden cursor-pointer"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="flex flex-col gap-6 relative z-10">
@@ -723,7 +756,7 @@ export default function App() {
                     </div>
                     <div>
                       <h3 className="text-3xl font-bold text-white mb-3 tracking-tight">{item.title}</h3>
-                      <p className="text-gray-400 leading-relaxed font-light text-lg">{item.desc}</p>
+                      <p className="text-muted leading-relaxed font-light text-lg">{item.desc}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -759,7 +792,7 @@ export default function App() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.3 }}
-                  className="text-gray-400 text-lg font-light leading-relaxed mb-10 max-w-lg"
+                  className="text-muted text-lg font-light leading-relaxed mb-10 max-w-lg"
                 >
                   Don't limit your growth to one language. Our AI translates your winning ads with perfect lip-sync, preserving the original speaker's voice and emotion.
                 </motion.p>
@@ -781,12 +814,12 @@ export default function App() {
                       className="group flex items-center justify-between p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-purple-500/30 transition-all duration-300"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-purple-500 text-gray-400 group-hover:text-white transition-all">
+                        <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-purple-500 text-muted group-hover:text-white transition-all">
                           <Globe className="w-4 h-4" />
                         </div>
                         <div className="text-left">
                           <h4 className="text-white font-medium text-sm">{item.lang}</h4>
-                          <p className="text-[10px] text-gray-500 font-mono uppercase tracking-wider group-hover:text-purple-300">{item.status}</p>
+                          <p className="text-[10px] text-muted-darker font-mono uppercase tracking-wider group-hover:text-purple-300">{item.status}</p>
                         </div>
                       </div>
                     </motion.button>
@@ -810,6 +843,7 @@ export default function App() {
                     loop 
                     muted 
                     playsInline 
+                    title="Global Language Translation Demo"
                   />
                   <div className="absolute bottom-6 right-6 z-20">
                     <motion.button 
@@ -833,11 +867,11 @@ export default function App() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="pt-20 pb-40 relative z-10 w-[95%] md:w-[90%] xl:w-[60%] mx-auto"
+          className="pt-20 pb-40 relative z-10 w-[95%] md:w-[90%] xl:w-[60%] mx-auto cursor-default"
         >
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tight">Frequently Asked Questions</h2>
-            <p className="text-gray-400">Everything you need to know about scaling your ads with AI.</p>
+            <p className="text-muted">Everything you need to know about scaling your ads with AI.</p>
           </div>
 
           <div className="space-y-4">
@@ -854,8 +888,8 @@ export default function App() {
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   className="w-full flex items-center justify-between p-6 text-left hover:bg-white/[0.01] transition-colors"
                 >
-                  <span className={`text-lg font-medium transition-colors ${openFaq === i ? 'text-white' : 'text-gray-300'}`}>{item.question}</span>
-                  <Plus className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${openFaq === i ? 'rotate-45 text-white' : ''}`} />
+                  <span className={`text-lg font-medium transition-colors ${openFaq === i ? 'text-white' : 'text-muted'}`}>{item.question}</span>
+                  <Plus className={`w-5 h-5 text-muted-darker transition-transform duration-300 ${openFaq === i ? 'rotate-45 text-white' : ''}`} />
                 </button>
                 <AnimatePresence>
                   {openFaq === i && (
@@ -865,7 +899,7 @@ export default function App() {
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="px-6 pb-6 text-gray-400 leading-relaxed">
+                      <div className="px-6 pb-6 text-muted leading-relaxed">
                         {item.answer}
                       </div>
                     </motion.div>
@@ -915,7 +949,7 @@ export default function App() {
                   </div>
                   <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-400 tracking-tight">UGC AdMaker</span>
                 </a>
-                <p className="text-gray-400 text-sm leading-relaxed font-medium">
+                <p className="text-muted text-sm leading-relaxed font-medium">
                   Create authentic AI-style ads that sell. The #1 platform for performance-focused UGC video generation.
                 </p>
                 <div className="flex flex-col gap-2">
@@ -941,7 +975,7 @@ export default function App() {
                     <h4 className="text-white font-bold text-xl mb-6">{column.title}</h4>
                     <ul className="space-y-3">
                       {column.items.map(item => (
-                        <li key={item}><a href="#" className="text-gray-500 hover:text-white transition-colors text-sm">{item}</a></li>
+                        <li key={item}><a href="#" className="text-muted-darker hover:text-white transition-colors text-sm">{item}</a></li>
                       ))}
                     </ul>
                   </motion.div>
@@ -956,14 +990,14 @@ export default function App() {
               transition={{ duration: 0.6, delay: 0.8 }}
               className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6"
             >
-              <p className="text-gray-500 text-sm font-medium">© 2026 Brandscalez Digital Enterprise. All rights reserved.</p>
+              <p className="text-muted-darker text-sm font-medium">© 2026 Brandscalez Digital Enterprise. All rights reserved.</p>
               <div className="flex items-center gap-4">
                 {[Linkedin, Twitter, Github].map((Icon, i) => (
                   <motion.a 
                     key={i} 
                     href="#" 
                     whileHover={{ y: -4, color: "#fff" }}
-                    className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-white/10 transition-all duration-300 border border-white/5"
+                    className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-muted hover:bg-white/10 transition-all duration-300 border border-white/5"
                   >
                     <Icon className="w-4 h-4" />
                   </motion.a>

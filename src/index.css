@@ -5,17 +5,39 @@
 @theme {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   
+  /* Brand Colors */
   --color-primary: #99A1AF;
   --color-accent: #030014;
-  --color-background: #FFFFFF;
-  --color-text-primary: #0A0A0A;
-  --color-link: #030014;
+  --color-brand-purple: #A855F7;
+  --color-brand-orange: #F97316;
+  --color-brand-blue: #3B82F6;
+  
+  /* Accessibility-First Muted Text (Contrast Ratio 4.5:1 on #030014) */
+  --color-muted: #94A3B8; /* slate-400 */
+  --color-muted-darker: #64748B; /* slate-500 */
+  
+  --color-background: #030014;
+  --color-text-primary: #FFFFFF;
+  --color-link: #FFFFFF;
 
   --animate-infinite-scroll: infinite-scroll 25s linear infinite;
+  --animate-shine: shine var(--duration) infinite linear;
 
   @keyframes infinite-scroll {
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
+  }
+
+  @keyframes shine {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+    to {
+      background-position: 0% 0%;
+    }
   }
 }
 
@@ -24,14 +46,68 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply font-sans;
+    @apply font-sans bg-background text-text-primary antialiased;
   }
 }
 
-.mask-image-gradient {
-  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-}
+@layer utilities {
+  .mask-image-gradient {
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  }
 
-.mask-linear-fade {
-  mask-image: linear-gradient(to bottom, black 50%, transparent);
+  .mask-linear-fade {
+    mask-image: linear-gradient(to bottom, black 50%, transparent);
+  }
+
+  /* Utility to pause animations for users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-delay: -1ms !important;
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+      background-attachment: initial !important;
+      scroll-behavior: auto !important;
+      transition-duration: 1ms !important;
+      transition-delay: -1ms !important;
+    }
+    
+    .animate-infinite-scroll {
+      animation: none !important;
+    }
+  }
+
+  .holo-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      circle at var(--x, 50%) var(--y, 50%),
+      rgba(255, 255, 255, 0.09) 0%,
+      rgba(255, 255, 255, 0.03) 50%,
+      transparent 100%
+    );
+    mix-blend-mode: overlay;
+    transition: opacity 0.5s;
+    z-index: 1;
+  }
+
+  .holographic-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s;
+    background: linear-gradient(
+      135deg,
+      rgba(168, 85, 247, 0.03) 0%,
+      rgba(59, 130, 246, 0.03) 50%,
+      rgba(249, 115, 22, 0.03) 100%
+    );
+    z-index: 1;
+  }
+
+  .holographic-card:hover::before {
+    opacity: 1;
+  }
 }
